@@ -22,6 +22,6 @@ contract NFT is ERC721 {
     }
 
     function _baseURI() internal view override returns (string memory) {
-        return "";
+        return "https://sleepy-fortress-10819.herokuapp.com/api/";
     }
 }
