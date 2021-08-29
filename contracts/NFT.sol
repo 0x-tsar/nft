@@ -14,14 +14,14 @@ contract NFT is ERC721 {
     function mint(address to) external payable {
         require(msg.sender == admin, "only admin");
         require(
-            msg.value == 10000000000 wei,
-            "value must be EQUAL TO 0.000000001 Ether"
+            msg.value >= 0.000001 ether,
+            "value must be EQUAL OR GREATER THAN 0.000000001 Ether"
         );
         _safeMint(to, nextTokenId);
         nextTokenId++;
     }
 
-    function _baseURI() internal view override returns (string memory) {
+    function _baseURI() internal pure override returns (string memory) {
         return "https://sleepy-fortress-10819.herokuapp.com/api/";
     }
 }

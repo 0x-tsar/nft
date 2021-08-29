@@ -2,7 +2,8 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../../styles/Home.module.css";
 
-export default function Home() {
+export default function Home({ data }) {
+  console.log(data);
   return (
     <div className={styles.container}>
       <Head>
@@ -12,4 +13,15 @@ export default function Home() {
       </Head>
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  console.log(`hello: ${process.env.hello}`);
+  console.log(`hello2: ${process.env.hello2}`);
+
+  return {
+    props: {
+      data: [process.env.hello, process.env.hello2],
+    },
+  };
 }
