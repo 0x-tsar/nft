@@ -1,4 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import cors from "cors";
+
+console.log(cors);
 
 const nfts = {
   0: {
@@ -41,7 +44,7 @@ const nfts = {
   },
 };
 
-export default (req, res) => {
+export const Api = (req, res) => {
   const id = req.query.id;
   // console.log(nfts[id]);
   if (nfts[id]) {
@@ -50,3 +53,30 @@ export default (req, res) => {
     res.status(400).json("Data not found");
   }
 };
+
+const allowCors = (fn) => async (req, res) => {
+  res.setHeader("Access-Control-Allow-Credentials", true);
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  // another common pattern
+  // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET,OPTIONS,PATCH,DELETE,POST,PUT"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
+  );
+  if (req.method === "OPTIONS") {
+    res.status(200).end();
+    return;
+  }
+  return await fn(req, res);
+};
+
+// const handler = (req, res) => {
+//   const d = new Date();
+//   res.end(d.toString());
+// };
+
+module.exports = allowCors(Api);
