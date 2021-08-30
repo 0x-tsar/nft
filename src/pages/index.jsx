@@ -4,17 +4,9 @@ import { useEffect, useState } from "react";
 import styles from "../../styles/Home.module.css";
 import getBlockchain from "../ethereum.js";
 import axios from "axios";
-import cors from "cors";
-
-const getApi = async () => {
-  const data = await axios.get(
-    "https://sleepy-fortress-10819.herokuapp.com/api/1"
-  );
-  // const data = await axios.get("https://randomuser.me/api/");
-};
+// import cors from "cors";
 
 export default function Home() {
-  getApi();
   const [tokenInfo, setTokenInfo] = useState(undefined);
   const [images, setImages] = useState([]);
 
@@ -29,32 +21,14 @@ export default function Home() {
 
       for (let i = 0; i < 2; i++) {
         let tokenURI = await nft.tokenURI(i);
-        // setImages([...images, tokenURI]);
-        // console.log(tokenURI);
-        // console.log(img);
-        setImages((images) => [...images, tokenURI]);
-        // setImages((images) => [...images, tokenURI]);
-      }
-      // const { description } = await axios.get(images[0]);
-      // console.log(img);
 
-      // console.log(data);
-      // setTokenInfo(data.result);
+        const data = await axios.get(tokenURI);
+        const picture = await data.data.properties.image.description;
+        setImages((images) => [...images, picture]);
+      }
     };
     init();
   }, []);
-
-  // useEffect(() => {
-  //   const api = async () => {
-  //     for (let i = 0; i < images.length; i++) {
-  //       console.log(images[0]);
-  //       // const data = await axios.get(images[0]);
-  //     }
-  //   };
-  //   api();
-  // }, [images]);
-
-  // console.log(images);
 
   return (
     <div className={styles.container}>
@@ -64,7 +38,15 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div></div>
+      <div>
+        {images.map((item, key) => {
+          return (
+            <div key={key}>
+              <img src={item} width="600px" alt="" />
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
